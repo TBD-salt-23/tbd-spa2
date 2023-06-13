@@ -19,7 +19,7 @@ const showImg = () => {
     const imgClone = document.importNode(template, true);
     imgClone.content.querySelector('.image').setAttribute('src', source);
     const clone = imgClone.content.cloneNode(true);
-    document.body.append(clone);
+    document.querySelector('.imageCards').append(clone);
   });
 };
 
