@@ -24,6 +24,13 @@ header {
   }
 }
 
+.searchBar {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+  height: 30px;
+}
+
 .imageCards {
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
