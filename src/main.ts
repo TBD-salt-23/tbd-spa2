@@ -32,12 +32,50 @@ const storageObject = {
 type Storage = {
   history: string[];
 };
+
+type State = {
+  title?: string;
+  message: string;
+  count?: number;
+};
+
+let state: State = {
+  title: 'hello',
+  message: 'is it me?',
+};
+
+const appendHTMLToState = (state: State) => {
+  return `<h3>${state.title}</h3>
+  <p>${state.message}</p>`;
+};
+const render = (htmlString: string, el: Element) => {
+  el.innerHTML = htmlString;
+};
+const update = (newState: State) => {
+  const count = window.history.state?.count || 0;
+  window.history.pushState(
+    { ...state, count: count + 1 },
+    'HISTORY',
+    `index.html#${count}`
+  );
+  state = { ...state, ...newState };
+  window.dispatchEvent(new Event('statechange'));
+};
+
+window.addEventListener('statechange', () => {
+  const elementToUpdate = document.querySelector('#app');
+  if (!elementToUpdate) return;
+  render(appendHTMLToState(state), elementToUpdate);
+});
+
 const button = document.querySelector('.searchBtn') as HTMLButtonElement;
 button.addEventListener('click', () => {
   const searchParam = document.querySelector(
     '.searchBar__field'
   ) as HTMLInputElement;
   if (!searchParam.value) return;
+  update({ message: searchParam.value });
+
   let storedItems = localStorage.getItem('searchParam') as any;
   if (!storedItems) {
     localStorage.setItem('searchParam', JSON.stringify({ history: [] }));
