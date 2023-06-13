@@ -1,23 +1,28 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import { setupCounter } from './counter.ts'
+/* eslint-disable */
+import './style.css';
+const template = document.getElementById('template');
+const source = 'https://picsum.photos/200';
+const listOfImages = [
+  source,
+  source,
+  source,
+  source,
+  source,
+  source,
+  source,
+  source,
+  source,
+];
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const showImg = () => {
+  listOfImages.forEach(() => {
+    const imgClone = document.importNode(template, true);
+    imgClone.content.querySelector('.image').setAttribute('src', source);
+    const clone = imgClone.content.cloneNode(true);
+    document.body.append(clone);
+  });
+};
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+showImg();
+
+/* eslint-disable */
