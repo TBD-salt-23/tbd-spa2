@@ -1,5 +1,7 @@
 /* eslint-disable */
+import axios from 'axios'
 import './style.css';
+const searchBar = document.querySelector('.searchBar__field');
 const template = document.querySelector('template') as Node;
 const source = 'https://picsum.photos/200';
 const listOfImages = [
@@ -13,6 +15,18 @@ const listOfImages = [
   source,
   source,
 ];
+
+const baseURL = 'https://api.unsplash.com/search/photos'
+const API_KEY = import.meta.env.VITE_DB_API_KEY
+
+const fetchImages = async (query: string) => {
+  const pictures = (await axios({
+    method: 'get',
+    url: `${baseURL}/?client_id=${API_KEY}&query=${query}`
+  })).data
+
+console.log(pictures.results[0].id)
+}
 
 const showImg = () => {
   listOfImages.forEach(() => {
@@ -30,43 +44,38 @@ const storageObject = {
 };
 
 type Storage = {
-  history: string[];
+  history: State[];
 };
 
 type State = {
-  title?: string;
-  message: string;
-  count?: number;
+  query: string;
 };
 
 let state: State = {
-  title: 'hello',
-  message: 'is it me?',
+  query: 'is it me?',
 };
 
-const appendHTMLToState = (state: State) => {
-  return `<h3>${state.title}</h3>
-  <p>${state.message}</p>`;
+const appendHTMLToState = (state: State[]) => {
+  const searchSuggestions = document.querySelector('.searchEntries');
+  if (!searchSuggestions) return;
+  searchSuggestions.innerHTML = `<ul>${state
+    .map(state => `<li>${state.query}</li>`)
+    .join('\n')}</ul>`;
 };
 const render = (htmlString: string, el: Element) => {
   el.innerHTML = htmlString;
 };
 const update = (newState: State) => {
-  const count = window.history.state?.count || 0;
-  window.history.pushState(
-    { ...state, count: count + 1 },
-    'HISTORY',
-    `index.html#${count}`
-  );
   state = { ...state, ...newState };
+
   window.dispatchEvent(new Event('statechange'));
 };
 
-window.addEventListener('statechange', () => {
-  const elementToUpdate = document.querySelector('#app');
-  if (!elementToUpdate) return;
-  render(appendHTMLToState(state), elementToUpdate);
-});
+// window.addEventListener('statechange', () => {
+//   const elementToUpdate = document.querySelector('#app');
+//   if (!elementToUpdate) return;
+//   render(appendHTMLToState(state), elementToUpdate);
+// });
 
 const button = document.querySelector('.searchBtn') as HTMLButtonElement;
 button.addEventListener('click', () => {
@@ -74,20 +83,33 @@ button.addEventListener('click', () => {
     '.searchBar__field'
   ) as HTMLInputElement;
   if (!searchParam.value) return;
-  update({ message: searchParam.value });
 
+fetchImages(searchParam.value)
+
+  update({ query: searchParam.value });
+
+  const parsedStorage = retrieveLocalStorage();
+
+  parsedStorage.history.push({
+    query: searchParam.value,
+  });
+
+  const storageToSave = JSON.stringify(parsedStorage);
+  localStorage.setItem('searchParam', storageToSave);
+});
+
+const retrieveLocalStorage = () => {
   let storedItems = localStorage.getItem('searchParam') as any;
   if (!storedItems) {
     localStorage.setItem('searchParam', JSON.stringify({ history: [] }));
     storedItems = localStorage.getItem('searchParam') as any;
   }
 
-  const parsedStorage = JSON.parse(storedItems) as Storage;
-  parsedStorage.history.push(searchParam.value);
-  const storageToSave = JSON.stringify(parsedStorage);
-  searchHistory.push(searchParam.value);
+  return JSON.parse(storedItems) as Storage;
+};
 
-  localStorage.setItem('searchParam', storageToSave);
+searchBar?.addEventListener('focus', () => {
+  appendHTMLToState(retrieveLocalStorage().history);
 });
 
 /* eslint-disable */
