@@ -22,7 +22,7 @@ jobs:
       - name: Run clean install and unit tests
         run: |
           npm ci
-          npm run t
+          npm t
           npm run lint -- --fix
 
       - name: Run server & e2e if pull request
