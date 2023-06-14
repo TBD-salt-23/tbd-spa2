@@ -1,4 +1,4 @@
-name: GitHub Classroom Workflow
+name: TBD Test Suite
 
 on:
   push:
@@ -19,12 +19,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm ci
-      - name: Run audit if pull request
-        if: github.event_name == 'pull_request'
-        run: npm audit
+      - name: Run clean install and unit tests
+        run: |
+          npm ci
+          npm run t
+          npm run lint -- --fix
 
-      - name: Run server if pull request
+      - name: Run server & e2e if pull request
         if: github.event_name == 'pull_request'
-        run: npm run dev &
-      - run: sleep 5
+        run: |
+          npm audit
+          npm run dev &
+          sleep 5
+          npm run cypress
