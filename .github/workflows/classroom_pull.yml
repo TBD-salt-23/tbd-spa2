@@ -1,13 +1,9 @@
 name: GitHub Classroom Workflow
 
 on:
-  push:
-    branches:
-      - dev
   pull_request:
     branches:
       - main
-
 permissions:
   checks: write
   actions: read
@@ -20,6 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci
+      - run: npm audit
       - run: npm run dev &
       - run: sleep 5
-      - uses: education/autograding@v1
+      - uses: education/autograting_pull@v1

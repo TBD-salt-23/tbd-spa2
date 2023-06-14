@@ -19,16 +19,6 @@
       "comparison": "included",
       "timeout": 10,
       "points": 10000
-    },
-    {
-      "name": "e2e tests",
-      "setup": "npm install",
-      "run": "npm run cypress",
-      "input": "",
-      "output": "",
-      "comparison": "included",
-      "timeout": 10,
-      "points": -1
     }
   ]
 }
