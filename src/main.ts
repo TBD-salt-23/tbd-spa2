@@ -34,7 +34,7 @@ const fetchImages = async (query: string) => {
   const pictures = (
     await axios({
       method: 'get',
-      url: `${baseURL}/?client_id=${API_KEY}&query=${query}`,
+      url: `${baseURL}/?client_id=${API_KEY}&query=${query}&per_page=9`,
     })
   ).data;
   pictures.results.forEach((picture: UnsplashObject) =>
