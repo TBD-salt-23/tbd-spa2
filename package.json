@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "cypress": "cypress run"
   },
   "author": {
     "name": "Muhammad Ahsan Ayaz",
