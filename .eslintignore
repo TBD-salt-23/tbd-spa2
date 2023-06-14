@@ -5,3 +5,4 @@ webpack.config.js
 **/*.spec.js
 **/*.e2e.js
 /cypress
+cypress.config.ts

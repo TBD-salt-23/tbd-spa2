@@ -31,9 +31,14 @@ header {
   height: 40px;
 
   .searchBar__field {
-    width: 40%;
+    width: 100%;
     padding: 5px;
   }
+}
+
+.searchBtn {
+  height: 30px;
+  width: auto;
 }
 
 .searchBar:hover .searchEntries {
