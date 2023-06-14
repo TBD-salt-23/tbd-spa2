@@ -15,20 +15,19 @@ permissions:
 
 jobs:
   build:
-    name: Autograding
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Run clean install and unit tests
+      - uses: actions/checkout@v3
+      - name: Run clean install and unit tests and linting
         run: |
           npm ci
           npm t
-          npm run lint -- --fix
+          npm run lint
 
       - name: Run server & e2e if pull request
         if: github.event_name == 'pull_request'
         run: |
           npm audit
           npm run dev &
-          sleep 5
           npm run cypress
