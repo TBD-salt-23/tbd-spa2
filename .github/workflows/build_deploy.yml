@@ -1,5 +1,5 @@
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -20,4 +20,4 @@ jobs:
       - name: Deploy 🚀
         uses: TBD-salt-23/github-pages-deploy-action@v4
         with:
-          folder: TBD-SPA2
+          folder: dist
