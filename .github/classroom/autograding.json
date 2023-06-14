@@ -23,6 +23,8 @@
     {
       "name": "e2e tests",
       "setup": "npm install",
+      "start": "npm run dev",
+      "wait-on": "http://127.0.0.1:5173/",
       "run": "npm run cypress",
       "input": "",
       "output": "",
