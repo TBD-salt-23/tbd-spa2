@@ -87,10 +87,16 @@ const appendHTMLToState = (state: State[]) => {
     .join('\n')}</ul>`;
   document.querySelectorAll('li').forEach(li =>
     li.addEventListener('click', () => {
-      const searchBar = document.querySelector('.searchBar__field');
+      console.log('We are inside the click');
+      const searchBar = document.querySelector(
+        '.searchBar__field'
+      ) as HTMLInputElement;
+      console.log('This is searchBar', searchBar);
       if (!searchBar) return;
+      searchBar.value = '';
       if (!li.textContent) return;
-      searchBar.setAttribute('value', li.textContent);
+      console.log('This is li text content', li.textContent);
+      searchBar.value = li.textContent;
     })
   );
 };
