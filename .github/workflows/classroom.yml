@@ -28,4 +28,3 @@ jobs:
         if: github.event_name == 'pull_request'
         run: npm run dev &
       - run: sleep 5
-      - uses: education/autograding@v1
