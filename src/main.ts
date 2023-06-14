@@ -81,9 +81,18 @@ let state: State = {
 const appendHTMLToState = (state: State[]) => {
   const searchSuggestions = document.querySelector('.searchEntries');
   if (searchSuggestions == null) return;
-  searchSuggestions.innerHTML = `<ul>${state
+  searchSuggestions.innerHTML = `<ul class="searchEntries__list">${state
     .map(state => `<li>${state.query}</li>`)
+    .slice(-5)
     .join('\n')}</ul>`;
+  document.querySelectorAll('li').forEach(li =>
+    li.addEventListener('click', () => {
+      const searchBar = document.querySelector('.searchBar__field');
+      if (!searchBar) return;
+      if (!li.textContent) return;
+      searchBar.setAttribute('value', li.textContent);
+    })
+  );
 };
 const render = (htmlString: string, el: Element) => {
   el.innerHTML = htmlString;

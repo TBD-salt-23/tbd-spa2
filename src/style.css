@@ -28,7 +28,37 @@ header {
   display: flex;
   justify-content: center;
   margin: 10px;
-  height: 30px;
+  height: 40px;
+
+  .searchBar__field {
+    width: 40%;
+    padding: 5px;
+  }
+}
+
+.searchBar:hover .searchEntries {
+  display: block;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.searchEntries {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  min-width: 100px;
+  background-color: #f1f1f1;
+}
+
+ul {
+  list-style: none;
+}
+
+.searchEntries__list {
+  display: block;
 }
 
 .image-cards {
