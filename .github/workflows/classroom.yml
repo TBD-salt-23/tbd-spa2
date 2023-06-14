@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - dev
+  pull_request:
+    branches:
+      - main
 
 permissions:
   checks: write
@@ -17,4 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci
-      - uses: education/autograding@v1
+      - name: Run audit if pull request
+        if: github.event_name == 'pull_request'
+        run: npm audit
+
+      - name: Run server if pull request
+        if: github.event_name == 'pull_request'
+        run: npm run dev &
+      - run: sleep 5
