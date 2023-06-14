@@ -6,7 +6,7 @@ context('Spies, Stubs, and Clock', () => {
     cy.visit('https://example.cypress.io/commands/spies-stubs-clocks')
 
     const obj = {
-      foo () {},
+      foo () {}
     }
 
     const spy = cy.spy(obj, 'foo').as('anyArgs')
@@ -26,7 +26,7 @@ context('Spies, Stubs, and Clock', () => {
       */
       foo (x) {
         console.log('obj.foo called with', x)
-      },
+      }
     }
 
     cy.spy(obj, 'foo').as('foo')
@@ -54,7 +54,7 @@ context('Spies, Stubs, and Clock', () => {
       */
       foo (a, b) {
         console.log('a', a, 'b', b)
-      },
+      }
     }
 
     const stub = cy.stub(obj, 'foo').as('foo')
@@ -104,7 +104,7 @@ context('Spies, Stubs, and Clock', () => {
       */
       greet (name) {
         return `Hello, ${name}!`
-      },
+      }
     }
 
     cy.stub(greeter, 'greet')
@@ -131,7 +131,7 @@ context('Spies, Stubs, and Clock', () => {
       */
       add (a, b) {
         return a + b
-      },
+      }
     }
 
     const spy = cy.spy(calculator, 'add').as('add')
@@ -181,12 +181,12 @@ context('Spies, Stubs, and Clock', () => {
     // you can combine several matchers using "and", "or"
     expect(spy).to.be.calledWith(
       Cypress.sinon.match.number,
-      Cypress.sinon.match(isGreaterThan(2), '> 2').and(Cypress.sinon.match(isLessThan(4), '< 4')),
+      Cypress.sinon.match(isGreaterThan(2), '> 2').and(Cypress.sinon.match(isLessThan(4), '< 4'))
     )
 
     expect(spy).to.be.calledWith(
       Cypress.sinon.match.number,
-      Cypress.sinon.match(isGreaterThan(200), '> 200').or(Cypress.sinon.match(3)),
+      Cypress.sinon.match(isGreaterThan(200), '> 200').or(Cypress.sinon.match(3))
     )
 
     // matchers can be used from BDD assertions

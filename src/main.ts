@@ -1,10 +1,19 @@
-/* eslint-disable */
-import axios from 'axios'
+import axios from 'axios';
 import './style.css';
+
+type UnsplashObject = {
+  description: string;
+  alt_description: string;
+  urls: {
+    small: string;
+    thumb: string;
+  };
+};
+
 const searchBar = document.querySelector('.searchBar__field');
 const template = document.querySelector('template') as Node;
 const source = 'https://picsum.photos/200';
-const listOfImages = [
+const listOfMockImages = [
   source,
   source,
   source,
@@ -16,25 +25,39 @@ const listOfImages = [
   source,
 ];
 
-const baseURL = 'https://api.unsplash.com/search/photos'
-const API_KEY = import.meta.env.VITE_DB_API_KEY
+let listOfImages: UnsplashObject[] = [];
+
+const baseURL = 'https://api.unsplash.com/search/photos';
+const API_KEY = import.meta.env.VITE_DB_API_KEY;
 
 const fetchImages = async (query: string) => {
-  const pictures = (await axios({
-    method: 'get',
-    url: `${baseURL}/?client_id=${API_KEY}&query=${query}`
-  })).data
-
-console.log(pictures.results[0].id)
-}
+  const pictures = (
+    await axios({
+      method: 'get',
+      url: `${baseURL}/?client_id=${API_KEY}&query=${query}`,
+    })
+  ).data;
+  pictures.results.forEach((picture: UnsplashObject) =>
+    listOfImages.push(picture)
+  );
+  console.log('Here is the array of our things', listOfImages);
+  showImg();
+  console.log(pictures.results[0].id);
+};
 
 const showImg = () => {
-  listOfImages.forEach(() => {
-    const imgClone = document.importNode(template, true) as any; //CHANGE THIS AT SOME POINT
-    imgClone.content.querySelector('.image').setAttribute('src', source);
+  const htmlElement = document.createElement('div');
+  htmlElement.setAttribute('class', 'image-cards');
+  listOfImages.forEach(picture => {
+    const imgClone = document.importNode(template, true) as any; // CHANGE THIS AT SOME POINT
+    imgClone.content
+      .querySelector('.image')
+      .setAttribute('src', picture.urls.small);
     const clone = imgClone.content.cloneNode(true);
-    document.querySelector('.imageCards')?.append(clone);
+    htmlElement.appendChild(clone);
   });
+  document.querySelector('.image-cards')?.replaceChildren(htmlElement);
+  listOfImages = [];
 };
 
 showImg();
@@ -43,13 +66,13 @@ const storageObject = {
   history: [],
 };
 
-type Storage = {
+interface Storage {
   history: State[];
-};
+}
 
-type State = {
+interface State {
   query: string;
-};
+}
 
 let state: State = {
   query: 'is it me?',
@@ -57,7 +80,7 @@ let state: State = {
 
 const appendHTMLToState = (state: State[]) => {
   const searchSuggestions = document.querySelector('.searchEntries');
-  if (!searchSuggestions) return;
+  if (searchSuggestions == null) return;
   searchSuggestions.innerHTML = `<ul>${state
     .map(state => `<li>${state.query}</li>`)
     .join('\n')}</ul>`;
@@ -84,7 +107,7 @@ button.addEventListener('click', () => {
   ) as HTMLInputElement;
   if (!searchParam.value) return;
 
-fetchImages(searchParam.value)
+  fetchImages(searchParam.value);
 
   update({ query: searchParam.value });
 
@@ -111,5 +134,3 @@ const retrieveLocalStorage = () => {
 searchBar?.addEventListener('focus', () => {
   appendHTMLToState(retrieveLocalStorage().history);
 });
-
-/* eslint-disable */
