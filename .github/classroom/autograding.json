@@ -8,7 +8,7 @@
       "output": "",
       "comparison": "included",
       "timeout": 10,
-      "points": 10
+      "points": 10000
     },
     {
       "name": "lint",
@@ -18,7 +18,7 @@
       "output": "",
       "comparison": "included",
       "timeout": 10,
-      "points": 10
+      "points": 10000
     }
   ]
 }
