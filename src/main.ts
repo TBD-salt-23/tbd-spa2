@@ -1,14 +1,14 @@
 import axios from 'axios';
 import './style.css';
 
-type UnsplashObject = {
+interface UnsplashObject {
   description: string;
   alt_description: string;
   urls: {
     small: string;
     thumb: string;
   };
-};
+}
 
 const searchBar = document.querySelector('.searchBar__field');
 const template = document.querySelector('template') as Node;
@@ -51,12 +51,12 @@ const showImg = () => {
   listOfImages.forEach(picture => {
     const imgClone = document.importNode(template, true) as any; // CHANGE THIS AT SOME POINT
     imgClone.content
-      .querySelector('.image')
+      .querySelector('.result-image')
       .setAttribute('src', picture.urls.small);
     const clone = imgClone.content.cloneNode(true);
     htmlElement.appendChild(clone);
   });
-  document.querySelector('.image-cards')?.replaceChildren(htmlElement);
+  document.querySelector('.image-section')?.replaceChildren(htmlElement);
   listOfImages = [];
 };
 

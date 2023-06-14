@@ -37,7 +37,15 @@ header {
   grid-template-columns: 1fr 1fr 1fr;
   justify-items: center;
 
-  .image {
+  .image-card {
+    width: 300px;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .result-image {
+    width: 100%;
+    height: fit-content;
     margin: 10px;
     border-radius: 5px;
   }
