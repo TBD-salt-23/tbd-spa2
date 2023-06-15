@@ -7,6 +7,8 @@ permissions:
   contents: write
 jobs:
   build-and-deploy:
+    environment:
+      name: github-pages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,7 +18,7 @@ jobs:
         run: npm ci
       - name: Build
         env:
-          VITE_DB_API_KEY: ${{secrets.VITE_DB_API_KEY}}
+          VITE_DB_API_KEY: ${{ secrets.VITE_DB_API_KEY }}
         run: npm run build
 
       - name: Deploy 🚀
