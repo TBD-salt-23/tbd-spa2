@@ -16,7 +16,7 @@ jobs:
         run: npm ci
       - name: Build
         env:
-          VITE_DB_API_KEY: ${{secrets.GITHUB_TOKEN}}
+          VITE_DB_API_KEY: ${{secrets.VITE_DB_API_KEY}}
         run: npm run build
 
       - name: Deploy 🚀
