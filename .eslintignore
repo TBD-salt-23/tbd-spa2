@@ -6,3 +6,4 @@ webpack.config.js
 **/*.e2e.js
 /cypress
 cypress.config.ts
+/dist

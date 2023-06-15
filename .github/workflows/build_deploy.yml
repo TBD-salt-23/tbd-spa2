@@ -18,6 +18,10 @@ jobs:
           npm run build
 
       - name: Deploy 🚀
+<<<<<<< Updated upstream
         uses: TBD-salt-23/github-pages-deploy-action@v4
+=======
+        uses: tbd-spa2/github-pages-deploy-action@v4
+>>>>>>> Stashed changes
         with:
           folder: dist

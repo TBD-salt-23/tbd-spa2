@@ -10,13 +10,29 @@ interface UnsplashObject {
   }
 }
 
-const searchBar = document.querySelector('.searchBar__field')
-const template = document.querySelector('template') as Node
+interface Storage {
+  history: State[]
+}
 
-let listOfImages: UnsplashObject[] = []
+interface State {
+  query: string
+}
+
+let state: State = {
+  query: ''
+}
+
+const button = document.querySelector('.searchBtn') as HTMLButtonElement
+const template = document.querySelector('template') as Node
+const searchField = document.querySelector(
+  '.searchBar__field'
+) as HTMLInputElement
+const searchSuggestions = document.querySelector('.searchEntries')
 
 const baseURL = 'https://api.unsplash.com/search/photos'
 const API_KEY: string = import.meta.env.VITE_DB_API_KEY
+
+let listOfImages: UnsplashObject[] = []
 
 const fetchImages = async (query: string): Promise<void> => {
   const pictures = (
@@ -30,6 +46,16 @@ const fetchImages = async (query: string): Promise<void> => {
   )
   console.log('Here is the array of our things', listOfImages)
   showImg()
+}
+
+const retrieveLocalStorage = (): Storage => {
+  let storedItems = localStorage.getItem('searchParam') ?? false
+  if (storedItems === false) {
+    localStorage.setItem('searchParam', JSON.stringify({ history: [] }))
+    storedItems = localStorage.getItem('searchParam') as string
+    return JSON.parse(storedItems) as Storage
+  }
+  return JSON.parse(storedItems) as Storage
 }
 
 const showImg = (): void => {
@@ -47,25 +73,16 @@ const showImg = (): void => {
   listOfImages = []
 }
 
-interface Storage {
-  history: State[]
-}
-
-interface State {
-  query: string
-}
-
-let state: State = {
-  query: 'is it me?'
-}
-
-const appendHTMLToState = (state: State[]): void => {
-  const searchSuggestions = document.querySelector('.searchEntries')
-  if (searchSuggestions == null) return
-  searchSuggestions.innerHTML = `<ul class="searchEntries__list">${state
-    .map(state => `<li>${state.query}</li>`)
+const suggestionsListHtml = (): string => {
+  return `<ul class="searchEntries__list">${retrieveLocalStorage()
+    .history.map(state => `<li>${state.query}</li>`)
     .slice(-5)
     .join('\n')}</ul>`
+}
+
+const updateSearchSuggestions = (): void => {
+  if (searchSuggestions == null) return
+  searchSuggestions.innerHTML = suggestionsListHtml()
   document.querySelectorAll('li').forEach(li => {
     li.addEventListener('click', () => {
       console.log('We are inside the click')
@@ -80,52 +97,33 @@ const appendHTMLToState = (state: State[]): void => {
     })
   })
 }
-// const render = (htmlString: string, el: Element) => {
-//   el.innerHTML = htmlString;
-// };
+
 const update = (newState: State): void => {
   state = { ...state, ...newState }
-
   window.dispatchEvent(new Event('statechange'))
 }
 
-// window.addEventListener('statechange', () => {
-//   const elementToUpdate = document.querySelector('#app');
-//   if (!elementToUpdate) return;
-//   render(appendHTMLToState(state), elementToUpdate);
-// });
-
-const button = document.querySelector('.searchBtn') as HTMLButtonElement
-button.addEventListener('click', () => {
-  const searchParam = document.querySelector(
-    '.searchBar__field'
-  ) as HTMLInputElement
-  fetchImages(searchParam.value).catch(error => {
+const fireSearch = (): void => {
+  fetchImages(searchField.value).catch(error => {
     console.log(error)
   })
-
-  update({ query: searchParam.value })
-
   const parsedStorage = retrieveLocalStorage()
-
   parsedStorage.history.push({
-    query: searchParam.value
+    query: searchField.value
   })
-
   const storageToSave = JSON.stringify(parsedStorage)
   localStorage.setItem('searchParam', storageToSave)
-})
-
-const retrieveLocalStorage = (): Storage => {
-  let storedItems = localStorage.getItem('searchParam') as string
-  if (storedItems.length < 0) {
-    localStorage.setItem('searchParam', JSON.stringify({ history: [] }))
-    storedItems = localStorage.getItem('searchParam') as string
-  }
-
-  return JSON.parse(storedItems) as Storage
+  update({ query: searchField.value })
 }
 
-searchBar?.addEventListener('focus', () => {
-  appendHTMLToState(retrieveLocalStorage().history)
+window.addEventListener('statechange', () => {
+  updateSearchSuggestions()
 })
+
+updateSearchSuggestions()
+
+button.addEventListener('click', fireSearch)
+
+searchField.onkeydown = ({ key }) => {
+  if (key === 'Enter') fireSearch()
+}
