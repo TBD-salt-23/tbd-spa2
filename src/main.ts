@@ -31,8 +31,6 @@ const searchSuggestions = document.querySelector('.searchEntries');
 
 const baseURL = 'https://api.unsplash.com/search/photos';
 const API_KEY: string = import.meta.env.VITE_DB_API_KEY;
-console.log('This is api key', API_KEY);
-console.log('this is another guy', import.meta.env);
 
 let listOfImages: UnsplashObject[] = [];
 
