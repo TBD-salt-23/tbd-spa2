@@ -1,15 +1,14 @@
-import axios from 'axios';
-import './style.css';
+import axios from 'axios'
+import './style.css'
 
 interface UnsplashObject {
-  description: string;
-  alt_description: string;
+  description: string
+  alt_description: string
   urls: {
-    small: string;
-    thumb: string;
-  };
+    small: string
+    thumb: string
+  }
 }
-
 
 interface Storage {
   history: State[]
@@ -30,9 +29,8 @@ const searchField = document.querySelector(
 ) as HTMLInputElement
 const searchSuggestions = document.querySelector('.searchEntries')
 
-
-const baseURL = 'https://api.unsplash.com/search/photos';
-const API_KEY: string = import.meta.env.VITE_DB_API_KEY;
+const baseURL = 'https://api.unsplash.com/search/photos'
+const API_KEY: string = import.meta.env.VITE_DB_API_KEY
 
 let listOfImages: UnsplashObject[] = []
 
@@ -40,15 +38,15 @@ const fetchImages = async (query: string): Promise<void> => {
   const pictures = (
     await axios({
       method: 'get',
-      url: `${baseURL}/?client_id=${API_KEY}&query=${query}&per_page=9`,
+      url: `${baseURL}/?client_id=${API_KEY}&query=${query}&per_page=9`
     })
-  ).data;
+  ).data
   pictures.results.forEach((picture: UnsplashObject) =>
     listOfImages.push(picture)
-  );
-  console.log('Here is the array of our things', listOfImages);
-  showImg();
-};
+  )
+  console.log('Here is the array of our things', listOfImages)
+  showImg()
+}
 
 const retrieveLocalStorage = (): Storage => {
   let storedItems = localStorage.getItem('searchParam') ?? false
@@ -61,20 +59,19 @@ const retrieveLocalStorage = (): Storage => {
 }
 
 const showImg = (): void => {
-  const htmlElement = document.createElement('div');
-  htmlElement.setAttribute('class', 'image-cards');
+  const htmlElement = document.createElement('div')
+  htmlElement.setAttribute('class', 'image-cards')
   listOfImages.forEach(picture => {
-    const imgClone = document.importNode(template, true) as any; // CHANGE THIS AT SOME POINT
+    const imgClone = document.importNode(template, true) as any // CHANGE THIS AT SOME POINT
     imgClone.content
       .querySelector('.result-image')
-      .setAttribute('src', picture.urls.small);
-    const clone = imgClone.content.cloneNode(true);
-    htmlElement.appendChild(clone);
-  });
-  document.querySelector('.image-section')?.replaceChildren(htmlElement);
-  listOfImages = [];
-};
-
+      .setAttribute('src', picture.urls.small)
+    const clone = imgClone.content.cloneNode(true)
+    htmlElement.appendChild(clone)
+  })
+  document.querySelector('.image-section')?.replaceChildren(htmlElement)
+  listOfImages = []
+}
 
 const suggestionsListHtml = (): string => {
   return `<ul class="searchEntries__list">${retrieveLocalStorage()
@@ -89,7 +86,7 @@ const updateSearchSuggestions = (): void => {
 
   document.querySelectorAll('li').forEach(li => {
     li.addEventListener('click', () => {
-      console.log('We are inside the click');
+      console.log('We are inside the click')
       const searchBar = document.querySelector(
         '.searchBar__field'
 
@@ -132,4 +129,3 @@ button.addEventListener('click', fireSearch)
 searchField.onkeydown = ({ key }) => {
   if (key === 'Enter') fireSearch()
 }
-
